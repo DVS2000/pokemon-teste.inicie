@@ -4,17 +4,27 @@ import 'package:pokemon_teste/src/utils/const_utils.dart';
 class TypeComponent extends StatelessWidget {
   final String title;
   final Color color;
-  const TypeComponent({Key? key, required this.title, required this.color})
-      : super(key: key);
+  final Size? size;
+  final double? borderRadius;
+  final double? marginRight;
+  const TypeComponent({
+    Key? key, 
+    required this.title, 
+    required this.color, 
+    this.size, 
+    this.borderRadius, 
+    this.marginRight
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 67,
-      margin: const EdgeInsets.only(right: 8),
+      width: size?.width ?? 67,
+      height: size?.height ?? 24,
+      margin: EdgeInsets.only(right: marginRight ?? 8),
       decoration: BoxDecoration(
         color: color, 
-        borderRadius: BorderRadius.circular(5)
+        borderRadius: BorderRadius.circular(borderRadius ?? 5)
       ),
       alignment: Alignment.center,
       child: Text(
