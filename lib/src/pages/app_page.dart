@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_teste/src/pages/intro_page/intro_page.dart';
+import 'package:pokemon_teste/src/pages/home_page/home_page.dart';
 
 class AppPage extends StatelessWidget {
   const AppPage({ Key? key }) : super(key: key);
@@ -9,7 +9,7 @@ class AppPage extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Pokemon App",
-      home: IntroPage(),
+      home: HomePage(),
     );
   }
 }
