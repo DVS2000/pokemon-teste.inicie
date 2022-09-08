@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pokemon_teste/src/pages/intro_page/component/custom_button_component.dart';
 

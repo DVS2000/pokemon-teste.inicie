@@ -72,7 +72,7 @@ class HeaderHomeComponent extends StatelessWidget {
                         ),
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.only(bottom: 22, left: 5)
+                          contentPadding: EdgeInsets.only(bottom: 17, left: 5)
                         ),
                       ),
                     ),
