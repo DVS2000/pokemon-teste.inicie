@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pokemon_teste/src/components/input_search_component.dart';
 import 'package:pokemon_teste/src/utils/const_utils.dart';
 
 class HeaderHomeComponent extends StatelessWidget {
@@ -20,8 +21,8 @@ class HeaderHomeComponent extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
+            children: const [
+              Text(
                 "Pokedéx",
                 style: TextStyle(
                   fontFamily: fontNunito,
@@ -30,7 +31,7 @@ class HeaderHomeComponent extends StatelessWidget {
                   fontWeight: FontWeight.w700
                 ),
               ),
-              const Text(
+              Text(
                 "Todas as espécies de pokemons\nestão esperando por você!",
                 style: TextStyle(
                   fontFamily: fontNunito, 
@@ -39,70 +40,7 @@ class HeaderHomeComponent extends StatelessWidget {
                 ),
               ),
 
-              // Input Serach
-              SizedBox(
-                height: 31,
-                width: 163,
-                child: Row(
-                  children: [
-                    Container(
-                      width: 123,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          width: 1, 
-                          color: const Color(0xffF4F4F4)
-                        ),
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(5),
-                          bottomLeft: Radius.circular(6)
-                        ),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color.fromRGBO(0, 0, 0, 0.15),
-                            offset: Offset(0.0, 4.0),
-                            blurRadius: 15
-                          )
-                        ]
-                      ),
-                      child: const TextField(
-                        style: TextStyle(
-                          color: primaryColor, 
-                          fontFamily: fontNunito
-                        ),
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.only(bottom: 17, left: 5)
-                        ),
-                      ),
-                    ),
-
-                    // Button Search
-                    Container(
-                      width: 40,
-                      decoration: const BoxDecoration(
-                        color: secundaryColor,
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(5),
-                          bottomRight: Radius.circular(6)
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: secundaryColor,
-                            offset: Offset(0.0, 4.0),
-                            blurRadius: 15
-                          )
-                        ]
-                      ),
-                      alignment: Alignment.center,
-                      child: const Icon(
-                        CupertinoIcons.search,
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
-                ),
-              )
+              InputSearchComponent()
             ],
           ),
           Expanded(
