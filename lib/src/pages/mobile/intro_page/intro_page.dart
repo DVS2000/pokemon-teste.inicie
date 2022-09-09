@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_teste/src/pages/intro_page/component/custom_button_component.dart';
+import 'package:pokemon_teste/src/pages/mobile/intro_page/component/custom_button_component.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({ Key? key }) : super(key: key);
@@ -23,7 +23,7 @@ class IntroPage extends StatelessWidget {
                 Positioned(
                   left: 30,
                   child: Image.asset(
-                    "assets/imgs/Logo.png",
+                    "assets/imgs/logo.png",
                     width: 100,
                   ),
                 )

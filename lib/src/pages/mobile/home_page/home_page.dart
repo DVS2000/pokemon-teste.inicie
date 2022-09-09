@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pokemon_teste/src/pages/home_page/components/header_home_component.dart';
-import 'package:pokemon_teste/src/pages/home_page/components/pokemon_card_component.dart';
+import 'package:pokemon_teste/src/pages/mobile/home_page/components/header_home_component.dart';
+import 'package:pokemon_teste/src/pages/mobile/home_page/components/pokemon_card_component.dart';
 import 'package:pokemon_teste/src/components/type_component.dart';
 import 'package:pokemon_teste/src/utils/const_utils.dart';
 
