@@ -5,7 +5,8 @@ import 'package:pokemon_teste/src/utils/const_utils.dart';
 
 class PokemonCardWebComponent extends StatelessWidget {
   final int index;
-  const PokemonCardWebComponent({Key? key, required this.index}) : super(key: key);
+  final double? marginTop;
+  const PokemonCardWebComponent({Key? key, required this.index, this.marginTop}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +20,8 @@ class PokemonCardWebComponent extends StatelessWidget {
             horizontal: 20,
             vertical: 25
           ),
-          margin: const EdgeInsets.only(
-            top: 15
+          margin: EdgeInsets.only(
+            top: marginTop ?? 15
           ),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -46,7 +47,7 @@ class PokemonCardWebComponent extends StatelessWidget {
                       color: primaryColor,
                       fontWeight: FontWeight.w700,
                       fontFamily: fontNunito,
-                      fontSize: 30
+                      fontSize: 28
                     ),
                   ),
                   
