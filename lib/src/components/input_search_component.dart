@@ -12,7 +12,7 @@ class InputSearchComponent extends StatelessWidget {
     return 
     SizedBox(
       height: isMobile ? 31 : 44,
-      width: context.sizedDevice.width,
+      width: context.sizedDevice.width / (isMobile ? 1.8 : 1),
       child: Row(
         children: [
           Expanded(

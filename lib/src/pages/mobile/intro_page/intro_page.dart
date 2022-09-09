@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:pokemon_teste/src/pages/mobile/home_page/home_page.dart';
 import 'package:pokemon_teste/src/pages/mobile/intro_page/component/custom_button_component.dart';
 
 class IntroPage extends StatelessWidget {
@@ -62,7 +64,10 @@ class IntroPage extends StatelessWidget {
 
             const SizedBox(height: 15,),
 
-            const CustomButtonComponent(title: "Começar",)
+            CustomButtonComponent(
+              title: "Começar",
+              ontap: () => Get.to(const HomePage()),
+            )
           ],
         ),
       ),

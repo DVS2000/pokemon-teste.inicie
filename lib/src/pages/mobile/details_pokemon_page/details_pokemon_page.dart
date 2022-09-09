@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pokemon_teste/src/components/type_component.dart';
 import 'package:pokemon_teste/src/pages/mobile/details_pokemon_page/components/skills_component.dart';
 import 'package:pokemon_teste/src/utils/const_utils.dart';
@@ -37,7 +38,7 @@ class _DetailsPokemonPageState extends State<DetailsPokemonPage> {
             color: Color(0xff2F3E77),
             size: 18,
           ),
-          onPressed: () {},
+          onPressed: () => Get.back(),
         ),
         title: Image.asset(
           "assets/imgs/logo.png",

@@ -5,11 +5,16 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:pokemon_teste/src/pages/mobile/intro_page/intro_page.dart';
 import 'package:pokemon_teste/src/pages/web/home_page_web/home_page_web.dart';
 
-// ignore: must_be_immutable
-class AppPage extends StatelessWidget {
-  AppPage({ Key? key }) : super(key: key);
+class AppPage extends StatefulWidget {
+  const AppPage({ Key? key }) : super(key: key);
 
+  @override
+  State<AppPage> createState() => _AppPageState();
+}
+
+class _AppPageState extends State<AppPage> {
   bool isMobile = false; 
+
   void validatePlataform() {
 
     /* 
@@ -23,6 +28,12 @@ class AppPage extends StatelessWidget {
     } catch (e) {
       isMobile = false;
     }
+  }
+
+  @override
+  void initState() {
+    validatePlataform();
+    super.initState();
   }
 
   @override
