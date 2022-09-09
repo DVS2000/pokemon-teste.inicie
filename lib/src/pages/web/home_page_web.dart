@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pokemon_teste/src/components/input_search_component.dart';
-import 'package:pokemon_teste/src/pages/mobile/home_page/components/pokemon_card_component.dart';
 import 'package:pokemon_teste/src/pages/web/components/pokemon_card_web_component.dart';
 import 'package:pokemon_teste/src/utils/const_utils.dart';
 
@@ -96,7 +95,7 @@ class _HomePageWebState extends State<HomePageWeb> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: List.generate(
                 10, 
-                (index) => const PokemonCardWebComponent()
+                (index) => PokemonCardWebComponent(index: index,)
               ).toList(),
             )
 

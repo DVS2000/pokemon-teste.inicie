@@ -5,11 +5,13 @@ class SkillsComponent extends StatelessWidget {
   final String skill;
   final Color color;
   final double value;
+  final bool isMobile;
   const SkillsComponent({
     Key? key, 
     required this.skill, 
     required this.color, 
-    required this.value 
+    required this.value,
+    this.isMobile = true 
   }) : super(key: key);
 
   @override
@@ -21,13 +23,13 @@ class SkillsComponent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
          SizedBox(
-          width: 80,
+          width: isMobile ? 80 : 100,
            child: Text(
               skill,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: fontNunito,
                 color: primaryColor,
-                fontSize: 12,
+                fontSize: isMobile ? 12 : 16,
                 fontWeight: FontWeight.w600
               ),
             ),
@@ -37,18 +39,18 @@ class SkillsComponent extends StatelessWidget {
             child: Stack(
               children: [
                 Container(
-                  height: 12,
+                  height: isMobile ? 12 : 22,
                   decoration: BoxDecoration(
                     color: const Color(0xffFBFDFF),
-                    borderRadius: BorderRadius.circular(4)
+                    borderRadius: BorderRadius.circular(isMobile ? 4 : 2)
                   ),
                 ),
                 Container(
-                  height: 12,
+                  height: isMobile ? 12 : 22,
                   width: value,
                   decoration: BoxDecoration(
                     color: color,
-                    borderRadius: BorderRadius.circular(4)
+                    borderRadius: BorderRadius.circular(isMobile ? 4 : 2)
                   ),
                 ),
               ],
