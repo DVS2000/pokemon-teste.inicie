@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pokemon_teste/src/pages/mobile/home_page/components/header_home_component.dart';
-import 'package:pokemon_teste/src/pages/mobile/home_page/components/pokemon_card_component.dart';
-import 'package:pokemon_teste/src/components/type_component.dart';
-import 'package:pokemon_teste/src/utils/const_utils.dart';
+import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
+
+import '../../../components/type_component.dart';
+import 'components/header_home_component.dart';
+import 'components/pokemon_card_component.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({ Key? key }) : super(key: key);

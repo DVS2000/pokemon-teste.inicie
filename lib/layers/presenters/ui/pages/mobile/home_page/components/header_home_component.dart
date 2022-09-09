@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pokemon_teste/src/components/input_search_component.dart';
-import 'package:pokemon_teste/src/utils/const_utils.dart';
+import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
+
+import '../../../../components/input_search_component.dart';
 
 class HeaderHomeComponent extends StatelessWidget {
   const HeaderHomeComponent({Key? key}) : super(key: key);

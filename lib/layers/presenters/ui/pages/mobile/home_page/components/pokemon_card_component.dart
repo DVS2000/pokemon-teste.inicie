@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pokemon_teste/src/pages/mobile/details_pokemon_page/details_pokemon_page.dart';
-import 'package:pokemon_teste/src/utils/const_utils.dart';
+import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
+
+import '../../details_pokemon_page/details_pokemon_page.dart';
 
 class PokemonCardComponent extends StatelessWidget {
   const PokemonCardComponent({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pokemon_teste/src/pages/mobile/home_page/home_page.dart';
-import 'package:pokemon_teste/src/pages/mobile/intro_page/component/custom_button_component.dart';
+import '../home_page/home_page.dart';
+import 'component/custom_button_component.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({ Key? key }) : super(key: key);

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_teste/src/utils/const_utils.dart';
+import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
 
 class TypeComponent extends StatelessWidget {
   final String title;

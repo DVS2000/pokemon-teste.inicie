@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_teste/src/components/input_search_component.dart';
-import 'package:pokemon_teste/src/helpers/enum_device_category.dart';
+
+import '../../../components/input_search_component.dart';
+import '../../../helpers/enum_device_category.dart';
 
 class HeaderHomeComponentWeb extends StatelessWidget {
   final DeviceCategory category;

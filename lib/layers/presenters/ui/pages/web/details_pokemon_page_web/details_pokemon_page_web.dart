@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_teste/src/components/type_component.dart';
-import 'package:pokemon_teste/src/pages/mobile/details_pokemon_page/components/skills_component.dart';
-import 'package:pokemon_teste/src/utils/const_utils.dart';
-import 'package:pokemon_teste/src/utils/size_device_util.dart';
+import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
+import 'package:pokemon_teste/layers/presenters/ui/utils/size_device_util.dart';
+
+import '../../../components/type_component.dart';
+import '../../mobile/details_pokemon_page/components/skills_component.dart';
 
 class DetailsPokemonPageWeb extends StatefulWidget {
   final String heroTag;

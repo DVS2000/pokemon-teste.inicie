@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pokemon_teste/src/utils/const_utils.dart';
-import 'package:pokemon_teste/src/utils/size_device_util.dart';
+import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
+import 'package:pokemon_teste/layers/presenters/ui/utils/size_device_util.dart';
 
 class InputSearchComponent extends StatelessWidget {
   final bool isMobile;

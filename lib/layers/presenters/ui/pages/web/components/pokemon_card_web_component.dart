@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pokemon_teste/src/pages/web/details_pokemon_page_web/details_pokemon_page_web.dart';
-import 'package:pokemon_teste/src/utils/const_utils.dart';
+import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
+
+import '../details_pokemon_page_web/details_pokemon_page_web.dart';
 
 class PokemonCardWebComponent extends StatelessWidget {
   final int index;

@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pokemon_teste/src/components/type_component.dart';
-import 'package:pokemon_teste/src/pages/mobile/details_pokemon_page/components/skills_component.dart';
-import 'package:pokemon_teste/src/utils/const_utils.dart';
+import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
+
+import '../../../components/type_component.dart';
+import 'components/skills_component.dart';
 
 class DetailsPokemonPage extends StatefulWidget {
   const DetailsPokemonPage({Key? key}) : super(key: key);
