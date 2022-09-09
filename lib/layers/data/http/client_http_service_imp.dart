@@ -6,12 +6,12 @@
  * Site: https://dorivaldodossantos.herokuapp.com
  */
 
-import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
-import 'package:pokemon_teste/layers/data/datasources/remote/client_http_service.dart';
 import 'package:simple_connection_checker/simple_connection_checker.dart';
+
+import 'client_http_service.dart';
 
 
 class ClientHttpServiceImp implements ClientHttpService {
@@ -24,7 +24,7 @@ class ClientHttpServiceImp implements ClientHttpService {
   }
 
   @override
-  Future<Response> get({required String route, required Map<String, String>? headers}) async {
+  Future<Response> get({required String route, Map<String, String>? headers}) async {
     try {
       bool isConnected = await SimpleConnectionChecker.isConnectedToInternet();
 
