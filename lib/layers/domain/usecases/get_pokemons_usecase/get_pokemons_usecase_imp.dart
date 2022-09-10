@@ -8,6 +8,6 @@ class GetPokemonUsecaseImp implements GetPokemonUsecase {
 
   GetPokemonUsecaseImp(this._getPokemonsRepository);
   @override
-  Future<Either<Exception, PokemonEntity>> call({int offset = 0}) => _getPokemonsRepository(offset: offset); 
+  Future<Either<Exception, List<PokemonEntity>>> call({int offset = 0}) => _getPokemonsRepository(offset: offset); 
   
 }

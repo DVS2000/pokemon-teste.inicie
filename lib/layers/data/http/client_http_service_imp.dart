@@ -24,20 +24,20 @@ class ClientHttpServiceImp implements ClientHttpService {
   }
 
   @override
-  Future<Response> get({required String route, Map<String, String>? headers}) async {
+  Future<Response> get({required String url, Map<String, String>? headers}) async {
     try {
-      bool isConnected = await SimpleConnectionChecker.isConnectedToInternet();
+      //bool isConnected = await SimpleConnectionChecker.isConnectedToInternet();
 
-      if (isConnected) {
+      //if (isConnected) {
 
         return await _client.get(
-          Uri.parse("https://pokeapi.co/api/v2/" + route),
+          Uri.parse(url),
           headers: headers
         );
 
-      } else {
-        return Response("{\"data\": null, \"message\": \"Sem internet\"}", 511);
-      }
+     // } else {
+     //   return Response("{\"data\": null, \"message\": \"Sem internet\"}", 511);
+    //  }
     } catch (e) {
       return Response("{\"data\": null, \"message\": \"Ocorreu um erro interno\"}", 500);
     }

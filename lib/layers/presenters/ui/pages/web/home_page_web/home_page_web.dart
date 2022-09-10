@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
+import 'package:pokemon_teste/layers/presenters/controllers/pokemon_controller/pokemon_controller.dart';
 import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
 import 'package:pokemon_teste/layers/presenters/ui/utils/size_device_util.dart';
 
@@ -15,6 +18,56 @@ class HomePageWeb extends StatefulWidget {
 }
 
 class _HomePageWebState extends State<HomePageWeb> {
+
+  var pokemonController = GetIt.instance.get<PokemonController>();
+  final pageController = PageController();
+  int pageCurrent = 0;
+
+  previewPage() {
+    pageController.previousPage(
+      duration: const Duration(milliseconds: 150), 
+      curve: Curves.easeIn
+    );
+  }
+  
+
+  nextPage() {
+
+
+    if((pageCurrent + 1) > pageController.page!.toInt() + 1) {
+      pokemonController.getPokemons().then(
+        (_) {
+          Future.delayed(const Duration(milliseconds: 150),() {
+            pageController.animateToPage(
+              pageCurrent++, 
+              duration: const Duration(milliseconds: 150), 
+              curve: Curves.easeIn
+            );
+          });
+        }    
+      );
+    } else {
+      Future.delayed(const Duration(milliseconds: 150),() {
+        pageController.animateToPage(
+          pageCurrent++, 
+          duration: const Duration(milliseconds: 150), 
+          curve: Curves.easeIn
+        );
+      });
+
+      pageCurrent = pageController.page!.toInt();
+    }
+  }
+
+  @override
+  void initState() {
+    pokemonController.getPokemons();
+
+    pageController.addListener(() {
+      print("PageView ${pageController.page!.toInt()} | Current Page $pageCurrent");
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return OrientationBuilder(
@@ -82,27 +135,34 @@ class _HomePageWebState extends State<HomePageWeb> {
                             isMobile()
                             ? const SizedBox()
                             : Row(
-                              children: const [
+                              children: [
       
 
-                                CircleAvatar(
-                                  backgroundColor: secundaryColor,
-                                  child: Center(
-                                    child: Icon(
-                                      CupertinoIcons.back,
-                                      color: Colors.white,
-                                      size: 25,
+                                GestureDetector(
+                                  onTap: () => previewPage(),
+                                  child: const CircleAvatar(
+                                    backgroundColor: secundaryColor,
+                                    child: Center(
+                                      child: Icon(
+                                        CupertinoIcons.back,
+                                        color: Colors.white,
+                                        size: 25,
+                                      ),
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 10,),
-                                CircleAvatar(
-                                  backgroundColor: secundaryColor,
-                                  child: Center(
-                                    child: Icon(
-                                      CupertinoIcons.forward,
-                                      color: Colors.white,
-                                      size: 25,
+                                const SizedBox(width: 10,),
+
+                                GestureDetector(
+                                  onTap: () => nextPage(),
+                                  child: const CircleAvatar(
+                                    backgroundColor: secundaryColor,
+                                    child: Center(
+                                      child: Icon(
+                                        CupertinoIcons.forward,
+                                        color: Colors.white,
+                                        size: 25,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -111,35 +171,51 @@ class _HomePageWebState extends State<HomePageWeb> {
                           ],
                         ),
                       ),
-
-                      ctx.sizedDevice.width <= 768 
-                      ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: List.generate(
-                          10, 
-                          (index) => PokemonCardWebComponent(index: index,)
-                        ).toList(),
-                      )
     
-                      : GridView.count(
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: const EdgeInsets.only(
-                            left: 15,
-                            right: 15,
-                            bottom: 25
-                          ),
-                          shrinkWrap: true,
-                          crossAxisCount: isTablet() ? 3 : 5,
-                          crossAxisSpacing: 20,
-                          mainAxisSpacing: 10,
-                          childAspectRatio: ctx.sizedDevice.width / (isTablet() ? 1000 : 1500),
-                          children: List.generate(10, (index) => PokemonCardWebComponent(
-                            index: index, 
-                            marginTop: 0,
-                          )
-                        ),
-                      )
+                      Observer(
+                          builder: (_) {
+                            return pokemonController.isLoading
+                            ? const CircularProgressIndicator()
+                            : isMobile() 
+                              ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: pokemonController.pokemons.map(
+                                  (pokemon) => PokemonCardWebComponent(
+                                    marginTop: 15,
+                                    pokemon: pokemon,
+                                  )
+                                ).toList(),
+                              ) 
+                              : SizedBox(
+                                width: context.sizedDevice.width,
+                                height: context.sizedDevice.height / (isTablet() ? 0.5 : 1.3),
+                                child: PageView(
+                                  controller: pageController,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  children: chunks(pokemonController.pokemons, 10).map((pokemons) => GridView.count(
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    padding: const EdgeInsets.only(
+                                      left: 15, 
+                                      right: 15, 
+                                      bottom: 25
+                                    ),
+                                    shrinkWrap: true,
+                                    crossAxisCount: isTablet() ? 3 : 5,
+                                    crossAxisSpacing: 20,
+                                    mainAxisSpacing: 10,
+                                    childAspectRatio: ctx.sizedDevice.width / (isTablet() ? 1000 : 1500),
+                                    children: pokemons.map(
+                                      (pokemon) => PokemonCardWebComponent(
+                                        marginTop: 0,
+                                        pokemon: pokemon,
+                                      )
+                                    ).toList(),
+                                  )).toList(),
+                                ),
+                              );
+                          }
+                       )
                     ],
                   ),
                 ),
@@ -150,4 +226,13 @@ class _HomePageWebState extends State<HomePageWeb> {
       }
     );
   }
+
+  Iterable<List<T>> chunks<T>(List<T> lst, int n) sync* {
+  final gen = List.generate(lst.length ~/ n + 1, (e) => e * n);
+  for (int i in gen) {
+    if (i < lst.length) {
+      yield lst.sublist(i, i + n < lst.length ? i + n : lst.length);
+    }
+  }
+}
 }

@@ -38,6 +38,10 @@ dependencies:
   dartz: ^0.10.1
   http: ^0.13.5
   simple_connection_checker: ^0.2.1
+  mobx: ^2.0.7
+  flutter_mobx: ^2.0.6+1
+  get_it: ^7.2.0
+  collection: ^1.15.0
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +53,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+  build_runner:
+  mobx_codegen:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

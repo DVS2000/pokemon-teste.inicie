@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pokemon_teste/layers/domain/entities/pokemon_entities.dart';
 import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
 
 import '../details_pokemon_page_web/details_pokemon_page_web.dart';
 
 class PokemonCardWebComponent extends StatelessWidget {
-  final int index;
   final double? marginTop;
-  const PokemonCardWebComponent({Key? key, required this.index, this.marginTop}) : super(key: key);
+  final PokemonEntity pokemon;
+  const PokemonCardWebComponent({Key? key, this.marginTop, required this.pokemon}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.to(DetailsPokemonPageWeb(heroTag: index.toString())),
+      onTap: () => Get.to(DetailsPokemonPageWeb(heroTag: pokemon.id.toString())),
       child: Center(
         child: Container(
           width: 306,
@@ -41,10 +42,10 @@ class PokemonCardWebComponent extends StatelessWidget {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
-                    "Squirtle",
-                    style: TextStyle(
+                    pokemon.name.substring(0,1).toUpperCase() + pokemon.name.substring(1,pokemon.name.length),
+                    style: const TextStyle(
                       color: primaryColor,
                       fontWeight: FontWeight.w700,
                       fontFamily: fontNunito,
@@ -53,8 +54,8 @@ class PokemonCardWebComponent extends StatelessWidget {
                   ),
                   
                   Text(
-                    "#COD",
-                    style: TextStyle(
+                    "#${pokemon.id}",
+                    style: const TextStyle(
                       fontFamily: fontNunito,
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
@@ -65,16 +66,16 @@ class PokemonCardWebComponent extends StatelessWidget {
               ),
 
               const Spacer(),
-              Image.asset(
-                "assets/imgs/pokemon1.png",
+              Image.network(
+                pokemon.image,
                 width: 122,
               ),
               const Spacer(),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     "Altura:",
                     style: TextStyle(
                       color: primaryColor,
@@ -85,8 +86,8 @@ class PokemonCardWebComponent extends StatelessWidget {
                   ),
                   
                   Text(
-                    "1.10cm",
-                    style: TextStyle(
+                    "${pokemon.height} cm",
+                    style: const TextStyle(
                       fontFamily: fontNunito,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -98,8 +99,8 @@ class PokemonCardWebComponent extends StatelessWidget {
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     "Peso:",
                     style: TextStyle(
                       color: primaryColor,
@@ -110,8 +111,8 @@ class PokemonCardWebComponent extends StatelessWidget {
                   ),
                   
                   Text(
-                    "30kg",
-                    style: TextStyle(
+                    "${pokemon.weight}kg",
+                    style: const TextStyle(
                       fontFamily: fontNunito,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,

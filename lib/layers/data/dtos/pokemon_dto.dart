@@ -5,9 +5,10 @@ import 'package:pokemon_teste/layers/domain/entities/stat_entity.dart';
 class PokemonDto extends PokemonEntity {
   int key;
   String nome;
-  double altura;
-  String peso;
-  int tipo;
+  int altura;
+  int peso;
+  String urlImg;
+  List<String> tipos;
   List<StatEntity> habilidades;
 
   PokemonDto({
@@ -15,14 +16,16 @@ class PokemonDto extends PokemonEntity {
     required this.nome, 
     required this.altura, 
     required this.peso, 
-    required this.tipo,
+    required this.urlImg,
+    required this.tipos,
     required this.habilidades
   }) : super(
     id: key,
     name: nome,
     height: altura,
     weight: peso,
-    type: tipo,
+    image: urlImg,
+    types: tipos,
     stats: habilidades
   );
 
@@ -31,7 +34,8 @@ class PokemonDto extends PokemonEntity {
     nome: map["name"] ?? "", 
     altura: map["height"] ?? 0, 
     peso: map["weight"] ?? 0, 
-    tipo: map["types"][0]["name"], 
+    urlImg: map["sprites"]["other"]["home"]["front_default"] ?? "",
+    tipos: List<String>.from(map["types"].map((x) => x["type"]["name"].toString())) , 
     habilidades: List<StatDto>.from(map["stats"].map((x) => StatDto.fromMap(x)))
   );
 }

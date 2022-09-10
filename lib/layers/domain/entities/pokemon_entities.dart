@@ -3,9 +3,10 @@ import 'package:pokemon_teste/layers/domain/entities/stat_entity.dart';
 class PokemonEntity {
   final int id;
   final String name;
-  final double height;
-  final String weight;
-  final int type;
+  final int height;
+  final int weight;
+  final String image;
+  final List<String> types;
   final List<StatEntity> stats;
 
   PokemonEntity({
@@ -13,7 +14,8 @@ class PokemonEntity {
     required this.name, 
     required this.height, 
     required this.weight, 
-    required this.type,
+    required this.image,
+    required this.types,
     required this.stats
   });
 
