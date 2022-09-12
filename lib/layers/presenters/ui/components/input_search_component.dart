@@ -5,7 +5,9 @@ import 'package:pokemon_teste/layers/presenters/ui/utils/size_device_util.dart';
 
 class InputSearchComponent extends StatelessWidget {
   final bool isMobile;
-  const InputSearchComponent({Key? key, this.isMobile = true}) : super(key: key);
+  final TextEditingController textEditingController;
+  final void Function()? onTapSearch;
+  const InputSearchComponent({Key? key, this.isMobile = true, required this.textEditingController, this.onTapSearch}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,7 @@ class InputSearchComponent extends StatelessWidget {
                 ]
               ),
               child: TextField(
+                controller: textEditingController,
                 style: const TextStyle(
                   color: primaryColor, 
                   fontFamily: fontNunito
@@ -50,34 +53,37 @@ class InputSearchComponent extends StatelessWidget {
           ),
 
           // Button Search
-          Container(
-            width: isMobile ? 40 : 106,
-            decoration: const BoxDecoration(
-              color: secundaryColor,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(5),
-                bottomRight: Radius.circular(6)
+          GestureDetector(
+            onTap: onTapSearch,
+            child: Container(
+              width: isMobile ? 40 : 106,
+              decoration: const BoxDecoration(
+                color: secundaryColor,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(5),
+                  bottomRight: Radius.circular(6)
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: secundaryColor,
+                    offset: Offset(0.0, 4.0),
+                    blurRadius: 15)
+                ]
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: secundaryColor,
-                  offset: Offset(0.0, 4.0),
-                  blurRadius: 15)
-              ]
-            ),
-            alignment: Alignment.center,
-            child: isMobile 
-            ? const Icon(
-              CupertinoIcons.search,
-              color: Colors.white,
-            )
-            : const Text(
-              "Buscar",
-              style: TextStyle(
-                fontFamily: fontNunito,
-                fontWeight: FontWeight.w700,
-                fontSize: 20,
-                color: Colors.white
+              alignment: Alignment.center,
+              child: isMobile 
+              ? const Icon(
+                CupertinoIcons.search,
+                color: Colors.white,
+              )
+              : const Text(
+                "Buscar",
+                style: TextStyle(
+                  fontFamily: fontNunito,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 20,
+                  color: Colors.white
+                ),
               ),
             ),
           )

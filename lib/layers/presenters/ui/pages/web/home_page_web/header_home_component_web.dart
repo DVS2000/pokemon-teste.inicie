@@ -5,7 +5,9 @@ import '../../../helpers/enum_device_category.dart';
 
 class HeaderHomeComponentWeb extends StatelessWidget {
   final DeviceCategory category;
-  const HeaderHomeComponentWeb({Key? key, required this.category}) : super(key: key);
+  final TextEditingController textEditingController;
+  final void Function()? onTapSearch;
+  const HeaderHomeComponentWeb({Key? key, required this.category, required this.textEditingController, this.onTapSearch}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +30,8 @@ class HeaderHomeComponentWeb extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text.rich(
+            children: [
+              const Text.rich(
                 TextSpan(
                   text: 'Explore o mundo\ndos ',
                   style: TextStyle(
@@ -48,10 +50,10 @@ class HeaderHomeComponentWeb extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 "Descubra todas as espécies de Pokémons",
                 style:
                   TextStyle(
@@ -60,12 +62,14 @@ class HeaderHomeComponentWeb extends StatelessWidget {
                   ),
               ),
 
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
 
               InputSearchComponent(
                 isMobile: false,
+                textEditingController: textEditingController,
+                onTapSearch: () => print("NOVVVVV"),
               ),
             ],
           ),
@@ -124,12 +128,14 @@ class HeaderHomeComponentWeb extends StatelessWidget {
                   height: 15,
                 ),
 
-                const Padding(
-                  padding: EdgeInsets.only(
+                Padding(
+                  padding: const EdgeInsets.only(
                     right: 150
                   ),
                   child: InputSearchComponent(
                     isMobile: false,
+                    textEditingController: textEditingController,
+                    onTapSearch: onTapSearch,
                   ),
                 ),
               ],

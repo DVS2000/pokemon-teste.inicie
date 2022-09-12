@@ -1,7 +1,9 @@
+import 'package:dartz/dartz.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pokemon_teste/layers/domain/entities/pokemon_entities.dart';
 import 'package:pokemon_teste/layers/domain/usecases/get_description_pokemon/get_description_pokemon_usecase.dart';
 import 'package:pokemon_teste/layers/domain/usecases/get_pokemons_usecase/get_pokemons_usecase.dart';
+import 'package:pokemon_teste/layers/domain/usecases/search_pokemon_usecase/search_pokemon_usecase.dart';
 
 part 'pokemon_controller.g.dart';
 
@@ -10,10 +12,12 @@ class PokemonController = _PokemonControllerBase with _$PokemonController;
 abstract class _PokemonControllerBase with Store {
   final GetPokemonUsecase _getPokemonUsecase;
   final GetDescriptionPokemonUsecase _getDescriptionPokemonUsecase;
+  final SearchPokemonUsecase _searchPokemonUsecase;
 
   _PokemonControllerBase(
     this._getPokemonUsecase, 
-    this._getDescriptionPokemonUsecase
+    this._getDescriptionPokemonUsecase,
+    this._searchPokemonUsecase
   );
 
   @observable
@@ -63,5 +67,19 @@ abstract class _PokemonControllerBase with Store {
     );
 
     isLoading = false;
+  }
+
+  Future<Either<String, PokemonEntity>> search({ required String text }) async {
+
+    isLoading = true;
+
+    final result = await _searchPokemonUsecase(text: text);
+
+    isLoading = false;
+
+    return result.fold(
+      (error) => Left(error.toString()),
+      (sucess) => Right(sucess)
+    );
   }
 }

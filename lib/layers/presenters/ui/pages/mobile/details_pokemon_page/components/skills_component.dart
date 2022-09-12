@@ -23,9 +23,9 @@ class SkillsComponent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
          SizedBox(
-          width: isMobile ? 80 : 100,
+          width: isMobile ? 80 : 140,
            child: Text(
-              skill,
+              skill.substring(0,1).toUpperCase() + skill.substring(1, skill.length),
               style: TextStyle(
                 fontFamily: fontNunito,
                 color: primaryColor,

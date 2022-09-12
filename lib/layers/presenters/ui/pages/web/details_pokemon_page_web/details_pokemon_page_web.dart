@@ -297,32 +297,13 @@ class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
                               SizedBox(
                                 width: context.sizedDevice.width / (isMobile() ? 1 : 3.2),
                                 child: Column(
-                                  children: const [
-                                    SkillsComponent(
-                                      skill: "Vida", 
-                                      color: Color(0xffF7802A), 
-                                      value: 150,
+                                  children: widget.pokemon.stats.map((stat) => SkillsComponent(
+                                      skill: stat.name, 
+                                      color: colorsForSkills[widget.pokemon.stats.indexOf(stat)], 
+                                      value: stat.value + 50,
                                       isMobile: false,
                                     ),
-                                    SkillsComponent(
-                                      skill: "Defesa", 
-                                      color: Color(0xffC4F789), 
-                                      value: 100,
-                                      isMobile: false,
-                                    ),
-                                    SkillsComponent(
-                                      skill: "Velocidade", 
-                                      color: Colors.green, 
-                                      value: 125,
-                                      isMobile: false,
-                                    ),
-                                    SkillsComponent(
-                                      skill: "Ataque", 
-                                      color: Color(0xffEA686D), 
-                                      value: 125,
-                                      isMobile: false,
-                                    ),
-                                  ],
+                                  ).toList(),
                                 ),
                               )
                             ],
@@ -371,4 +352,14 @@ class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
       }
     );
   }
+
+  final colorsForSkills = [
+    const Color(0xffF7802A),
+    const Color(0xffC4F789),
+    const Color(0xffEA686D),
+    Colors.purple,
+    Colors.pink,
+    Colors.blue,
+    Colors.orange
+  ];
 }

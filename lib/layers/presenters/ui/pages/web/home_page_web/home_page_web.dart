@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pokemon_teste/layers/presenters/controllers/pokemon_controller/pokemon_controller.dart';
 import 'package:pokemon_teste/layers/presenters/ui/components/loaders_components/loader_home_web.dart';
 import 'package:pokemon_teste/layers/presenters/ui/helpers/chunks_list.dart';
 import 'package:pokemon_teste/layers/presenters/ui/pages/mobile/intro_page/component/custom_button_component.dart';
+import 'package:pokemon_teste/layers/presenters/ui/pages/web/details_pokemon_page_web/details_pokemon_page_web.dart';
 import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
 import 'package:pokemon_teste/layers/presenters/ui/utils/size_device_util.dart';
 
@@ -23,6 +25,7 @@ class HomePageWeb extends StatefulWidget {
 class _HomePageWebState extends State<HomePageWeb> {
 
   var pokemonController = GetIt.instance.get<PokemonController>();
+  TextEditingController textEditingController = TextEditingController();
   final pageController = PageController();
   
   previewPage() {
@@ -94,6 +97,27 @@ class _HomePageWebState extends State<HomePageWeb> {
                     children: [
 
                       HeaderHomeComponentWeb(
+                        textEditingController: textEditingController,
+                        onTapSearch: () => pokemonController.search(text: textEditingController.text.trim())
+                          .then((value) {
+                            if(value.isLeft()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text(
+                                  "Pokémon não encontrado",
+                                  style: TextStyle(fontFamily: fontNunito, fontSize: 18) ,
+                                  )
+                                )
+                              );
+                            } else {
+
+                              var pokemon;
+
+                              value.fold((l) => null, (r) => pokemon = r);
+                              Get.to(
+                                DetailsPokemonPageWeb(pokemon: pokemon)
+                              );
+                            }
+                          }),
                         category: isMobile() 
                           ? DeviceCategory.phone 
                           : isTablet() 

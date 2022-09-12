@@ -32,6 +32,8 @@ class _HomePageState extends State<HomePage> {
   final scrollController = ScrollController();
   bool showShadowAppBar = false;
 
+  TextEditingController textEditingController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -90,7 +92,9 @@ class _HomePageState extends State<HomePage> {
                 children: [
 
                   const SizedBox(height: 10,),
-                  const HeaderHomeComponent(),
+                  HeaderHomeComponent(
+                    textEditingController: textEditingController,
+                  ),
 
                   const Padding(
                     padding: EdgeInsets.only(

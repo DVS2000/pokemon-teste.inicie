@@ -5,7 +5,9 @@ import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
 import '../../../../components/input_search_component.dart';
 
 class HeaderHomeComponent extends StatelessWidget {
-  const HeaderHomeComponent({Key? key}) : super(key: key);
+  final TextEditingController textEditingController;
+  final void Function()? onTapSearch;
+  const HeaderHomeComponent({Key? key, required this.textEditingController, this.onTapSearch}) : super(key: key,);
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +24,8 @@ class HeaderHomeComponent extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
+            children: [
+              const Text(
                 "Pokedéx",
                 style: TextStyle(
                   fontFamily: fontNunito,
@@ -32,7 +34,7 @@ class HeaderHomeComponent extends StatelessWidget {
                   fontWeight: FontWeight.w700
                 ),
               ),
-              Text(
+              const Text(
                 "Todas as espécies de pokemons\nestão esperando por você!",
                 style: TextStyle(
                   fontFamily: fontNunito, 
@@ -41,7 +43,10 @@ class HeaderHomeComponent extends StatelessWidget {
                 ),
               ),
 
-              InputSearchComponent()
+              InputSearchComponent(
+                textEditingController: textEditingController,
+                onTapSearch: onTapSearch,
+              )
             ],
           ),
           Expanded(
