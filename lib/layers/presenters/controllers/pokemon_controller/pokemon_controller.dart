@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:pokemon_teste/layers/domain/entities/pokemon_entities.dart';
+import 'package:pokemon_teste/layers/domain/usecases/get_description_pokemon/get_description_pokemon_usecase.dart';
 import 'package:pokemon_teste/layers/domain/usecases/get_pokemons_usecase/get_pokemons_usecase.dart';
 
 part 'pokemon_controller.g.dart';
@@ -8,8 +9,12 @@ class PokemonController = _PokemonControllerBase with _$PokemonController;
 
 abstract class _PokemonControllerBase with Store {
   final GetPokemonUsecase _getPokemonUsecase;
+  final GetDescriptionPokemonUsecase _getDescriptionPokemonUsecase;
 
-  _PokemonControllerBase(this._getPokemonUsecase);
+  _PokemonControllerBase(
+    this._getPokemonUsecase, 
+    this._getDescriptionPokemonUsecase
+  );
 
   @observable
   bool isLoading = false;
@@ -19,6 +24,9 @@ abstract class _PokemonControllerBase with Store {
 
   @observable
   String errorText = "";
+
+  @observable
+  String descriptionPokemon = "";
 
   int offset = 0;
 
@@ -35,6 +43,22 @@ abstract class _PokemonControllerBase with Store {
       (sucess) {
         pokemons.addAll(sucess);
         offset += 10;
+      }
+    );
+
+    isLoading = false;
+  }
+
+  Future<void> getDescriptionPokemonById({ required int id }) async {
+
+    isLoading = true;
+
+    final result = await _getDescriptionPokemonUsecase(id: id);
+
+    result.fold(
+      (error) => errorText = error.toString(),
+      (sucess) {
+        descriptionPokemon = sucess;
       }
     );
 

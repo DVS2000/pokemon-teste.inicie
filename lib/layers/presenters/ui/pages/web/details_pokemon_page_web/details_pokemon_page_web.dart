@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
+import 'package:pokemon_teste/layers/domain/entities/pokemon_entities.dart';
+import 'package:pokemon_teste/layers/presenters/controllers/pokemon_controller/pokemon_controller.dart';
 import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
 import 'package:pokemon_teste/layers/presenters/ui/utils/size_device_util.dart';
+import 'package:skeletons/skeletons.dart';
 
 import '../../../components/type_component.dart';
 import '../../mobile/details_pokemon_page/components/skills_component.dart';
 
 class DetailsPokemonPageWeb extends StatefulWidget {
-  final String heroTag;
-  const DetailsPokemonPageWeb({Key? key, required this.heroTag}) : super(key: key);
+  final PokemonEntity pokemon;
+  const DetailsPokemonPageWeb({Key? key, required this.pokemon}) : super(key: key);
 
   @override
   State<DetailsPokemonPageWeb> createState() => _DetailsPokemonPageWebState();
 }
 
 class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
+  var pokemonController = GetIt.instance.get<PokemonController>();
+
   final scrollController = ScrollController();
   bool showShadowAppBar = false;
 
@@ -24,6 +31,8 @@ class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
     scrollController.addListener(() {
       setState(() => showShadowAppBar = scrollController.offset > 2);
     });
+
+    pokemonController.getDescriptionPokemonById(id: widget.pokemon.id);
   }
 
   @override
@@ -101,7 +110,7 @@ class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
                               ),
     
                               Text(
-                                "Charmeleon",
+                                widget.pokemon.name.substring(0,1).toUpperCase() + widget.pokemon.name.substring(1, widget.pokemon.name.length),
                                 style: TextStyle(
                                   fontFamily: fontNunito,
                                   color: primaryColor,
@@ -112,9 +121,9 @@ class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
     
                               !isMobile() 
                               ? const SizedBox()
-                              : const Text(
-                                "Cod:   #0034",
-                                style: TextStyle(
+                              : Text(
+                                "Cod:   #${widget.pokemon.id}",
+                                style: const TextStyle(
                                   fontFamily: fontNunito,
                                   color: primaryColor,
                                   fontSize: 18,
@@ -127,9 +136,9 @@ class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
 
                                   isMobile()
                                   ? const SizedBox()
-                                  : const Text(
-                                    "Cod:   #0034",
-                                    style: TextStyle(
+                                  : Text(
+                                    "Cod:   #${widget.pokemon.id}",
+                                    style: const TextStyle(
                                       fontFamily: fontNunito,
                                       color: primaryColor,
                                       fontSize: 22,
@@ -151,10 +160,12 @@ class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
     
                                   const SizedBox(width: 10,),
     
-                                  const TypeComponent(
-                                    title: "Fogo", 
-                                    color: Color(0xffF7802A),
-                                    size: Size(52, 24),
+                                  TypeComponent(
+                                    title: 
+                                        widget.pokemon.types.first.substring(0,1).toUpperCase() 
+                                        + widget.pokemon.types.first.substring(1,widget.pokemon.types.first.length), 
+                                    color: const Color(0xffF7802A),
+                                    size: const Size(60, 24),
                                     borderRadius: 2,
                                     marginRight: 0,
                                   )
@@ -164,9 +175,9 @@ class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
                               ? const SizedBox()
                               : Center(
                                 child: Hero(
-                                  tag: widget.heroTag,
-                                  child: Image.asset(
-                                    "assets/imgs/pokemon1.png",
+                                  tag: widget.pokemon.id.toInt(),
+                                  child: Image.network(
+                                    widget.pokemon.image,
                                     height: 230,
                                     fit: BoxFit.cover,
                                   ),
@@ -188,14 +199,36 @@ class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
     
                               const SizedBox(height: 10),
     
-                              const Text(
-                                '"Charmeleon destrói seus oponentes sem pena com suas garras afiadas. Torna-se agressivo quando encontra um oponente forte e então a chama na ponta da sua cauda queima intensamente em uma cor azulada."',
-                                style: TextStyle(
-                                  fontFamily: fontNunito,
-                                  color: primaryColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600
-                                ),
+                             Observer(builder: (_) {
+                              return pokemonController.isLoading
+                              ? Column(
+                                  children: [
+                                    SkeletonLine(
+                                      style: SkeletonLineStyle(
+                                        height: 16,
+                                        width: 170,
+                                        borderRadius: BorderRadius.circular(8)
+                                      ),
+                                    ),
+                                    SkeletonLine(
+                                      style: SkeletonLineStyle(
+                                        height: 150,
+                                        width: 34,
+                                        borderRadius: BorderRadius.circular(8)
+                                      ),
+                                    )
+                                  ],
+                                ) 
+                                : Text(
+                                    '"${pokemonController.descriptionPokemon.replaceAll("\n", "")}"',
+                                      style: const TextStyle(
+                                        fontFamily: fontNunito,
+                                        color: primaryColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600
+                                      ),
+                                    );
+                                  }
                               ),
     
                               const SizedBox(height: 20),
@@ -212,8 +245,8 @@ class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
     
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: const [
-                                  Text(
+                                children: [
+                                  const Text(
                                     "Altura:",
                                     style: TextStyle(
                                       color: primaryColor,
@@ -224,8 +257,8 @@ class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
                                   ),
                                   
                                   Text(
-                                    "1.10cm",
-                                    style: TextStyle(
+                                    "${widget.pokemon.height}cm",
+                                    style: const TextStyle(
                                       fontFamily: fontNunito,
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
@@ -237,8 +270,8 @@ class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
     
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: const [
-                                  Text(
+                                children: [
+                                  const Text(
                                     "Peso:",
                                     style: TextStyle(
                                       color: primaryColor,
@@ -249,8 +282,8 @@ class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
                                   ),
                                   
                                   Text(
-                                    "30kg",
-                                    style: TextStyle(
+                                    "${widget.pokemon.weight}kg",
+                                    style: const TextStyle(
                                       fontFamily: fontNunito,
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
@@ -316,8 +349,8 @@ class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
                               child: Stack(
                                 children: [
                                   Center(
-                                    child: Image.asset(
-                                      "assets/imgs/pokemon1.png",
+                                    child: Image.network(
+                                      widget.pokemon.image,
                                       height: ctx.sizedDevice.width / 3.5,
                                       fit: BoxFit.cover,
                                     ),

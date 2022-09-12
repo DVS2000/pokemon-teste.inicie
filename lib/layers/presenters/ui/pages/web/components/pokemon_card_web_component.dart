@@ -13,7 +13,7 @@ class PokemonCardWebComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.to(DetailsPokemonPageWeb(heroTag: pokemon.id.toString())),
+      onTap: () => Get.to(DetailsPokemonPageWeb(pokemon: pokemon,)),
       child: Center(
         child: Container(
           width: 306,
