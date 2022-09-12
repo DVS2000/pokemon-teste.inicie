@@ -212,8 +212,8 @@ class _DetailsPokemonPageWebState extends State<DetailsPokemonPageWeb> {
                                     ),
                                     SkeletonLine(
                                       style: SkeletonLineStyle(
-                                        height: 150,
-                                        width: 34,
+                                        height: 16,
+                                        width: 154,
                                         borderRadius: BorderRadius.circular(8)
                                       ),
                                     )

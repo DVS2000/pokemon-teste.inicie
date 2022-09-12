@@ -1,5 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
+import 'package:pokemon_teste/layers/domain/entities/pokemon_entities.dart';
+import 'package:pokemon_teste/layers/presenters/controllers/pokemon_controller/pokemon_controller.dart';
+import 'package:pokemon_teste/layers/presenters/ui/components/loaders_components/loader_home_web.dart';
+import 'package:pokemon_teste/layers/presenters/ui/pages/mobile/details_pokemon_page/details_pokemon_page.dart';
+import 'package:pokemon_teste/layers/presenters/ui/pages/mobile/intro_page/component/custom_button_component.dart';
 import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
 
 import '../../../components/type_component.dart';
@@ -16,12 +24,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   List<TypeModel> types = [
-    TypeModel(title: "Fogo", color: const Color(0xffF1AFB2)),
-    TypeModel(title: "Normal", color: const Color(0xff49D0B0)),
-    TypeModel(title: "Ar", color: const Color(0xff9E81A9)),
-    TypeModel(title: "Terra", color: const Color(0xff2E7885)),
-    TypeModel(title: "Pedra", color: const Color(0xff383332))
+    TypeModel(title: "Fogo", color: const Color(0xffF1AFB2), idText: "fire"),
+    TypeModel(title: "Normal", color: const Color(0xff49D0B0), idText: "normal"),
+    TypeModel(title: "Elétrico", color: Colors.yellow, idText: "electric"),
+    TypeModel(title: "Brigando", color: const Color(0xff9E81A9), idText: "fighting"),
+    TypeModel(title: "Voador", color: const Color(0xff2E7885), idText: "flying"),
+    TypeModel(title: "Bug", color: const Color(0xff383332), idText: "bug")
   ];
+
+  String typeSelected = "";
 
   List<MenuModel> menus = [
     MenuModel(title: "Home", icon: CupertinoIcons.home),
@@ -34,6 +45,8 @@ class _HomePageState extends State<HomePage> {
 
   TextEditingController textEditingController = TextEditingController();
 
+  final pokemonController = GetIt.instance.get<PokemonController>();
+
   @override
   void initState() {
     super.initState();
@@ -41,6 +54,8 @@ class _HomePageState extends State<HomePage> {
     scrollController.addListener(() {
       setState(() => showShadowAppBar = scrollController.offset > 2);
     });
+
+    pokemonController.getPokemons();
   }
 
   @override
@@ -94,6 +109,29 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 10,),
                   HeaderHomeComponent(
                     textEditingController: textEditingController,
+                    onTapSearch: () => pokemonController.search(text: textEditingController.text.trim())
+                      .then((value) {
+                        
+                        if(value.isLeft()) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Pokémon não encontrado",
+                                style: TextStyle(fontFamily: fontNunito, fontSize: 18) ,
+                              )
+                            )
+                          );
+                        } else {
+
+                        late PokemonEntity pokemon;
+                        value.fold((l) => null, (r) => pokemon = r);
+                        
+                        Get.to(
+                          DetailsPokemonPage(pokemon: pokemon)
+                         );
+                        }
+                      }
+                    ),
                   ),
 
                   const Padding(
@@ -117,7 +155,19 @@ class _HomePageState extends State<HomePage> {
                     child: ListView(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       scrollDirection: Axis.horizontal,
-                      children: types.map((type) => TypeComponent(title: type.title, color: type.color)).toList(),
+                      children: types.map(
+                        (type) => TypeComponent(
+                          title: type.title, 
+                          color: type.color,
+                          selected: typeSelected == type.idText,
+                          onTap: () {
+                            setState(() => typeSelected = typeSelected == type.idText ? "" : type.idText);
+                            typeSelected == type.idText
+                              ? pokemonController.getPokemonsByType(type: type.idText)
+                              : pokemonController.getPokemons();
+                          },
+                        )
+                        ).toList(),
                     ),
                   ),
 
@@ -137,19 +187,41 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
 
-                  GridView.count(
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.only(
-                      left: 15,
-                      right: 15,
-                      bottom: 25
-                    ),
-                    shrinkWrap: true,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 1.5,
-                    children: List.generate(8, (index) => const PokemonCardComponent()),
+                  Observer(
+                    builder: (_) {
+                      return pokemonController.isLoading && pokemonController.pokemons.isEmpty
+                      ? const LoaderHomeWeb(widthDevice: 767)
+                      : Column(
+                        children: [
+                          GridView.count(
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: const EdgeInsets.only(
+                              left: 15,
+                              right: 15,
+                              bottom: 25
+                            ),
+                            shrinkWrap: true,
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 1.5,
+                            children: pokemonController.pokemons.map((pokemon) => PokemonCardComponent(
+                              pokemon: pokemon,
+                            )).toList(),
+                          ),
+
+                          const SizedBox(height: 20,),
+                          CustomButtonComponent(
+                            title: pokemonController.isLoading
+                              ? "Carregando..." 
+                              : "Carregar mais",
+                            ontap: pokemonController.isLoading 
+                              ? () {} 
+                              : () => pokemonController.getPokemons(),
+                          )
+                        ],
+                      );
+                    }
                   )
                 ],
               ),
@@ -203,10 +275,11 @@ class _HomePageState extends State<HomePage> {
 }
 
 class TypeModel {
+  final String idText;
   final String title;
   final Color color;
 
-  TypeModel({ required this.title, required this.color });
+  TypeModel({ required this.title, required this.color, required this.idText });
 }
 
 class MenuModel {

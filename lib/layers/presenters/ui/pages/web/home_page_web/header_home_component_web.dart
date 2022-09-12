@@ -69,7 +69,7 @@ class HeaderHomeComponentWeb extends StatelessWidget {
               InputSearchComponent(
                 isMobile: false,
                 textEditingController: textEditingController,
-                onTapSearch: () => print("NOVVVVV"),
+                onTapSearch: onTapSearch,
               ),
             ],
           ),

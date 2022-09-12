@@ -1,13 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
+import 'package:pokemon_teste/layers/domain/entities/pokemon_entities.dart';
+import 'package:pokemon_teste/layers/presenters/controllers/pokemon_controller/pokemon_controller.dart';
 import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
+import 'package:skeletons/skeletons.dart';
 
 import '../../../components/type_component.dart';
 import 'components/skills_component.dart';
 
 class DetailsPokemonPage extends StatefulWidget {
-  const DetailsPokemonPage({Key? key}) : super(key: key);
+  final PokemonEntity pokemon;
+  const DetailsPokemonPage({Key? key, required this.pokemon}) : super(key: key);
 
   @override
   State<DetailsPokemonPage> createState() => _DetailsPokemonPageState();
@@ -17,6 +23,8 @@ class _DetailsPokemonPageState extends State<DetailsPokemonPage> {
   final scrollController = ScrollController();
   bool showShadowAppBar = false;
 
+  var pokemonController = GetIt.instance.get<PokemonController>();
+
   @override
   void initState() {
     super.initState();
@@ -24,6 +32,8 @@ class _DetailsPokemonPageState extends State<DetailsPokemonPage> {
     scrollController.addListener(() {
       setState(() => showShadowAppBar = scrollController.offset > 2);
     });
+
+    pokemonController.getDescriptionPokemonById(id: widget.pokemon.id);
   }
 
   @override
@@ -76,8 +86,8 @@ class _DetailsPokemonPageState extends State<DetailsPokemonPage> {
                   )
                 ),
                 alignment: Alignment.center,
-                child: Image.asset(
-                  "assets/imgs/pokemon1.png",
+                child: Image.network(
+                  widget.pokemon.image,
                   height: 210,
                   fit: BoxFit.cover,
                 ),
@@ -89,10 +99,10 @@ class _DetailsPokemonPageState extends State<DetailsPokemonPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      children: const [
+                      children: [
                         Text(
-                          "Charmeleon",
-                          style: TextStyle(
+                          widget.pokemon.name.substring(0,1).toUpperCase() + widget.pokemon.name.substring(1, widget.pokemon.name.length),
+                          style: const TextStyle(
                             fontFamily: fontNunito,
                             color: primaryColor,
                             fontSize: 18,
@@ -100,14 +110,14 @@ class _DetailsPokemonPageState extends State<DetailsPokemonPage> {
                           ),
                         ),
 
-                        Spacer(),
+                        const Spacer(),
 
-                        Icon(
+                        const Icon(
                           CupertinoIcons.heart,
                           color: Colors.grey,
                           size: 19,
                         ),
-                        Icon(
+                        const Icon(
                           Icons.share,
                           color: Colors.grey,
                           size: 19,
@@ -118,10 +128,10 @@ class _DetailsPokemonPageState extends State<DetailsPokemonPage> {
                     const SizedBox(height: 5,),
 
                     Row(
-                      children: const [
+                      children: [
                         Text(
-                          "Cod: #0034",
-                          style: TextStyle(
+                          "Cod: #${widget.pokemon.id}",
+                          style: const TextStyle(
                             fontFamily: fontNunito,
                             fontSize: 14,
                             color: primaryColor,
@@ -129,12 +139,12 @@ class _DetailsPokemonPageState extends State<DetailsPokemonPage> {
                           ),
                         ),
 
-                        Spacer(),
+                        const Spacer(),
 
                         TypeComponent(
-                          title: "Fogo", 
-                          color: Color(0xffF7802A),
-                          size: Size(50, 22),
+                          title: widget.pokemon.types.first, 
+                          color: const Color(0xffF7802A),
+                          size: const Size(50, 22),
                           borderRadius: 2,
                           marginRight: 0,
                         )
@@ -156,37 +166,51 @@ class _DetailsPokemonPageState extends State<DetailsPokemonPage> {
 
                     const SizedBox(height: 10),
 
-                    const Text(
-                      '"Charmeleon destrói seus oponentes sem pena com suas garras afiadas. Torna-se agressivo quando encontra um oponente forte e então a chama na ponta da sua cauda queima intensamente em uma cor azulada."',
-                      style: TextStyle(
-                        fontFamily: fontNunito,
-                        color: primaryColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600
-                      ),
-                    ),
+                    
+
+                    Observer(
+                      builder: (_) {
+                        return pokemonController.isLoading
+                        ? Column(
+                            children: [
+                              SkeletonLine(
+                                style: SkeletonLineStyle(
+                                  height: 16,
+                                  width: 170,
+                                  borderRadius: BorderRadius.circular(8)
+                                ),
+                              ),
+                              SkeletonLine(
+                                style: SkeletonLineStyle(
+                                  height: 16,
+                                  width: 154,
+                                  borderRadius: BorderRadius.circular(8)
+                                ),
+                              )
+                            ],
+                          ) 
+                          : Text(
+                              '"${pokemonController.descriptionPokemon.replaceAll("\n", "")}"',
+                                style: const TextStyle(
+                                  fontFamily: fontNunito,
+                                  color: primaryColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600
+                                ),
+                              );
+                            }
+                        ),
 
                     const SizedBox(height: 20),
 
-                    const SkillsComponent(
-                      skill: "Vida", 
-                      color: Color(0xffF7802A), 
-                      value: 150
+                    Column(
+                      children: widget.pokemon.stats.map((stat) => SkillsComponent(
+                        skill: stat.name, 
+                        color: colorsForSkills[widget.pokemon.stats.indexOf(stat)], 
+                        value: stat.value + 50,
+                      ),
+                      ).toList(),
                     ),
-                    const SkillsComponent(
-                      skill: "Defesa", 
-                      color: Color(0xffC4F789), 
-                      value: 100
-                    ),
-                    const SkillsComponent(
-                      skill: "Ataque", 
-                      color: Color(0xffEA686D), 
-                      value: 125
-                    ),
-
-
-
-
                   ],
                 ),
               )
@@ -196,4 +220,14 @@ class _DetailsPokemonPageState extends State<DetailsPokemonPage> {
       ),
     );
   }
+
+  final colorsForSkills = [
+    const Color(0xffF7802A),
+    const Color(0xffC4F789),
+    const Color(0xffEA686D),
+    Colors.purple,
+    Colors.pink,
+    Colors.blue,
+    Colors.orange
+  ];
 }

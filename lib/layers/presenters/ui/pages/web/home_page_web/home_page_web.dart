@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pokemon_teste/layers/domain/entities/pokemon_entities.dart';
 import 'package:pokemon_teste/layers/presenters/controllers/pokemon_controller/pokemon_controller.dart';
 import 'package:pokemon_teste/layers/presenters/ui/components/loaders_components/loader_home_web.dart';
 import 'package:pokemon_teste/layers/presenters/ui/helpers/chunks_list.dart';
@@ -110,7 +111,7 @@ class _HomePageWebState extends State<HomePageWeb> {
                               );
                             } else {
 
-                              var pokemon;
+                              late PokemonEntity pokemon;
 
                               value.fold((l) => null, (r) => pokemon = r);
                               Get.to(

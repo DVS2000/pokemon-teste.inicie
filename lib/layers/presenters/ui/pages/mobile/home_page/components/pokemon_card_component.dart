@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pokemon_teste/layers/domain/entities/pokemon_entities.dart';
 import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
 
 import '../../details_pokemon_page/details_pokemon_page.dart';
 
 class PokemonCardComponent extends StatelessWidget {
-  const PokemonCardComponent({Key? key}) : super(key: key);
+  final PokemonEntity pokemon;
+  const PokemonCardComponent({Key? key, required this.pokemon}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.to(const DetailsPokemonPage()),
+      onTap: () => Get.to(DetailsPokemonPage(pokemon: pokemon,)),
       child: Container(
         width: 160,
         height: 110,
@@ -34,9 +36,9 @@ class PokemonCardComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
-                const Text(
-                  "Squirtle",
-                  style: TextStyle(
+                Text(
+                  pokemon.name.substring(0,1).toUpperCase() + pokemon.name.substring(1,pokemon.name.length),
+                  style: const TextStyle(
                     color: primaryColor,
                     fontWeight: FontWeight.w700,
                     fontFamily: fontNunito,
@@ -51,9 +53,9 @@ class PokemonCardComponent extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5)
                   ),
                   alignment: Alignment.center,
-                  child: const Text(
-                    "Tipo",
-                    style: TextStyle(
+                  child: Text(
+                    pokemon.types.first,
+                    style: const TextStyle(
                       fontFamily: fontNunito,
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -61,9 +63,9 @@ class PokemonCardComponent extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Text(
-                  "#COD",
-                  style: TextStyle(
+                Text(
+                  "#${pokemon.id}",
+                  style: const TextStyle(
                     fontFamily: fontNunito,
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -79,8 +81,8 @@ class PokemonCardComponent extends StatelessWidget {
                   width: 80,
                   fit: BoxFit.cover,
                 ),
-                Image.asset(
-                  "assets/imgs/pokemon.png",
+                Image.network(
+                  pokemon.image.isEmpty ? "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/25.png" : pokemon.image,
                   width: 80,
                 ),
               ],

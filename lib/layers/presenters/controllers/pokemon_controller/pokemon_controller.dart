@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pokemon_teste/layers/domain/entities/pokemon_entities.dart';
 import 'package:pokemon_teste/layers/domain/usecases/get_description_pokemon/get_description_pokemon_usecase.dart';
+import 'package:pokemon_teste/layers/domain/usecases/get_pokemons_by_type_usecase/get_pokemons_by_type_usecase.dart';
 import 'package:pokemon_teste/layers/domain/usecases/get_pokemons_usecase/get_pokemons_usecase.dart';
 import 'package:pokemon_teste/layers/domain/usecases/search_pokemon_usecase/search_pokemon_usecase.dart';
 
@@ -13,11 +14,13 @@ abstract class _PokemonControllerBase with Store {
   final GetPokemonUsecase _getPokemonUsecase;
   final GetDescriptionPokemonUsecase _getDescriptionPokemonUsecase;
   final SearchPokemonUsecase _searchPokemonUsecase;
+  final GetPokemonByTypeUsecase _getPokemonByTypeUsecase;
 
   _PokemonControllerBase(
     this._getPokemonUsecase, 
     this._getDescriptionPokemonUsecase,
-    this._searchPokemonUsecase
+    this._searchPokemonUsecase,
+    this._getPokemonByTypeUsecase
   );
 
   @observable
@@ -46,6 +49,24 @@ abstract class _PokemonControllerBase with Store {
       // Recebo todos os pokemons e em seguida aumento 10 no offset para trazer os proximos 10 pokemnos... 
       (sucess) {
         pokemons.addAll(sucess);
+        offset += 10;
+      }
+    );
+
+    isLoading = false;
+  }
+
+  Future<void> getPokemonsByType({required String type}) async {
+
+    pokemons = [];
+    isLoading = true;
+
+    final result = await _getPokemonByTypeUsecase(type: type);
+
+    result.fold(
+      (error) => errorText = error.toString(),
+      (sucess) {
+        pokemons = sucess;
         offset += 10;
       }
     );
