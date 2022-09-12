@@ -1,7 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:pokemon_teste/layers/domain/entities/pokemon_entities.dart';
 import 'package:pokemon_teste/layers/domain/usecases/get_pokemons_usecase/get_pokemons_usecase.dart';
-import 'package:collection/collection.dart' as Colletions;
 
 part 'pokemon_controller.g.dart';
 
@@ -40,7 +39,5 @@ abstract class _PokemonControllerBase with Store {
     );
 
     isLoading = false;
-
-
   }
 }

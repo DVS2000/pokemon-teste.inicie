@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pokemon_teste/layers/presenters/controllers/pokemon_controller/pokemon_controller.dart';
+import 'package:pokemon_teste/layers/presenters/ui/components/loaders_components/loader_home_web.dart';
+import 'package:pokemon_teste/layers/presenters/ui/helpers/chunks_list.dart';
+import 'package:pokemon_teste/layers/presenters/ui/pages/mobile/intro_page/component/custom_button_component.dart';
 import 'package:pokemon_teste/layers/presenters/ui/utils/const_utils.dart';
 import 'package:pokemon_teste/layers/presenters/ui/utils/size_device_util.dart';
 
@@ -21,51 +24,42 @@ class _HomePageWebState extends State<HomePageWeb> {
 
   var pokemonController = GetIt.instance.get<PokemonController>();
   final pageController = PageController();
-  int pageCurrent = 0;
-
+  
   previewPage() {
     pageController.previousPage(
       duration: const Duration(milliseconds: 150), 
       curve: Curves.easeIn
     );
   }
-  
 
   nextPage() {
-
-
-    if((pageCurrent + 1) > pageController.page!.toInt() + 1) {
+    if(pageController.page!.toInt() + 1 == (chunks(pokemonController.pokemons, 10).length)) {
       pokemonController.getPokemons().then(
         (_) {
           Future.delayed(const Duration(milliseconds: 150),() {
             pageController.animateToPage(
-              pageCurrent++, 
+              chunks(pokemonController.pokemons, 10).length, 
               duration: const Duration(milliseconds: 150), 
               curve: Curves.easeIn
             );
           });
         }    
       );
+
     } else {
       Future.delayed(const Duration(milliseconds: 150),() {
         pageController.animateToPage(
-          pageCurrent++, 
+          pageController.page!.toInt() + 1, 
           duration: const Duration(milliseconds: 150), 
           curve: Curves.easeIn
         );
       });
-
-      pageCurrent = pageController.page!.toInt();
     }
   }
 
   @override
   void initState() {
     pokemonController.getPokemons();
-
-    pageController.addListener(() {
-      print("PageView ${pageController.page!.toInt()} | Current Page $pageCurrent");
-    });
     super.initState();
   }
   @override
@@ -174,46 +168,62 @@ class _HomePageWebState extends State<HomePageWeb> {
     
                       Observer(
                           builder: (_) {
-                            return pokemonController.isLoading
-                            ? const CircularProgressIndicator()
+                            return pokemonController.isLoading && pokemonController.pokemons.isEmpty
+                            ? LoaderHomeWeb(widthDevice: ctx.sizedDevice.width,)
                             : isMobile() 
                               ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: pokemonController.pokemons.map(
-                                  (pokemon) => PokemonCardWebComponent(
-                                    marginTop: 15,
-                                    pokemon: pokemon,
-                                  )
-                                ).toList(),
-                              ) 
-                              : SizedBox(
-                                width: context.sizedDevice.width,
-                                height: context.sizedDevice.height / (isTablet() ? 0.5 : 1.3),
-                                child: PageView(
-                                  controller: pageController,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  children: chunks(pokemonController.pokemons, 10).map((pokemons) => GridView.count(
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    padding: const EdgeInsets.only(
-                                      left: 15, 
-                                      right: 15, 
-                                      bottom: 25
-                                    ),
-                                    shrinkWrap: true,
-                                    crossAxisCount: isTablet() ? 3 : 5,
-                                    crossAxisSpacing: 20,
-                                    mainAxisSpacing: 10,
-                                    childAspectRatio: ctx.sizedDevice.width / (isTablet() ? 1000 : 1500),
-                                    children: pokemons.map(
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: pokemonController.pokemons.map(
                                       (pokemon) => PokemonCardWebComponent(
-                                        marginTop: 0,
+                                        marginTop: 15,
                                         pokemon: pokemon,
                                       )
                                     ).toList(),
-                                  )).toList(),
-                                ),
-                              );
+                                  ),
+
+                                  const SizedBox(height: 20,),
+                                  CustomButtonComponent(
+                                    title: pokemonController.isLoading
+                                         ? "Carregando..." 
+                                         : "Carregar mais",
+                                    ontap: pokemonController.isLoading 
+                                           ? () {} 
+                                           : () => pokemonController.getPokemons(),
+                                  )
+                                ],
+                              ) 
+                              : pokemonController.isLoading && pokemonController.pokemons.isNotEmpty
+                                  ? LoaderHomeWeb(widthDevice: ctx.sizedDevice.width,)
+                                  : SizedBox(
+                                      width: context.sizedDevice.width,
+                                      height: context.sizedDevice.height / (isTablet() ? 0.5 : 1.3),
+                                      child: PageView(
+                                        controller: pageController,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        children: chunks(pokemonController.pokemons, 10).map((pokemons) => GridView.count(
+                                          physics: const NeverScrollableScrollPhysics(),
+                                          padding: const EdgeInsets.only(
+                                            left: 15, 
+                                            right: 15, 
+                                            bottom: 25
+                                          ),
+                                          shrinkWrap: true,
+                                          crossAxisCount: isTablet() ? 3 : 5,
+                                          crossAxisSpacing: 20,
+                                          mainAxisSpacing: 10,
+                                          childAspectRatio: ctx.sizedDevice.width / (isTablet() ? 1000 : 1500),
+                                          children: pokemons.map(
+                                            (pokemon) => PokemonCardWebComponent(
+                                              marginTop: 0,
+                                              pokemon: pokemon,
+                                            )
+                                          ).toList(),
+                                        )).toList(),
+                                      ),
+                                    );
                           }
                        )
                     ],
@@ -226,13 +236,4 @@ class _HomePageWebState extends State<HomePageWeb> {
       }
     );
   }
-
-  Iterable<List<T>> chunks<T>(List<T> lst, int n) sync* {
-  final gen = List.generate(lst.length ~/ n + 1, (e) => e * n);
-  for (int i in gen) {
-    if (i < lst.length) {
-      yield lst.sublist(i, i + n < lst.length ? i + n : lst.length);
-    }
-  }
-}
 }
