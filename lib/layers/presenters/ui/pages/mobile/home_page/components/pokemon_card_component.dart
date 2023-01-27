@@ -42,11 +42,11 @@ class PokemonCardComponent extends StatelessWidget {
                     color: primaryColor,
                     fontWeight: FontWeight.w700,
                     fontFamily: fontNunito,
-                    fontSize: 16
+                    fontSize: 15
                   ),
                 ),
                 Container(
-                  width: 67,
+                  width: 60,
                   margin: const EdgeInsets.symmetric(vertical: 5),
                   decoration: BoxDecoration(
                     color: const Color(0xffF1AFB2),
@@ -78,12 +78,12 @@ class PokemonCardComponent extends StatelessWidget {
               children: [
                 Image.asset(
                   "assets/imgs/Vector.png",
-                  width: 80,
+                  width: 70,
                   fit: BoxFit.cover,
                 ),
                 Image.network(
                   pokemon.image.isEmpty ? "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/25.png" : pokemon.image,
-                  width: 80,
+                  width: 70,
                 ),
               ],
             )
